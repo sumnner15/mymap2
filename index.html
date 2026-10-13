@@ -1,0 +1,1627 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>뮤지엄 패스포트 | Museum Passport</title>
+
+<style>
+/* ============================= */
+/* 1. 전체 디자인 */
+/* ============================= */
+
+:root {
+  --cream: #FAF7F0;
+  --paper: #FFFDF8;
+  --sage: #829B82;
+  --dark: #405746;
+  --brown: #9B775D;
+  --soft: #EAF0E7;
+  --border: #E6E3D9;
+  --gray: #858A80;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Malgun Gothic", sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* ============================= */
+/* 2. 왼쪽 사이드바 */
+/* ============================= */
+
+.sidebar {
+  width: 415px;
+  min-width: 350px;
+  padding: 28px 24px;
+  background: var(--cream);
+  overflow-y: auto;
+  z-index: 2;
+  box-shadow: 3px 0 18px #00000009;
+}
+
+.brand {
+  color: var(--brown);
+  font-size: 12px;
+  letter-spacing: 3px;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 29px;
+  margin: 12px 0;
+  letter-spacing: -1px;
+}
+
+.subtitle {
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--gray);
+  margin-bottom: 22px;
+}
+
+/* 여권 디자인 */
+.passport {
+  background: linear-gradient(
+    135deg, #607B65, #405C4A
+  );
+  border-radius: 19px;
+  color: white;
+  padding: 22px;
+  box-shadow: 0 8px 22px #405C4A25;
+  margin-bottom: 24px;
+}
+
+.passport-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  opacity: 0.8;
+}
+
+.passport h2 {
+  font-size: 21px;
+  margin: 12px 0;
+}
+
+.passport-description {
+  font-size: 12px;
+  opacity: 0.8;
+  line-height: 1.7;
+}
+
+.stats {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.stat {
+  flex: 1;
+  border: 1px solid #FFFFFF50;
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 5px;
+}
+
+.stat span {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+/* ============================= */
+/* 3. 검색 메뉴 */
+/* ============================= */
+
+.section-title {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 17px 0 12px;
+}
+
+.search-row {
+  display: flex;
+  gap: 8px;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: white;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--sage);
+}
+
+.search-button {
+  background: var(--sage);
+  color: white;
+  padding: 0 19px;
+  border: 0;
+  border-radius: 12px;
+  font-weight: bold;
+}
+
+.search-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* 박물관 종류 */
+.categories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.category-button {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 12px 8px;
+  color: var(--dark);
+  font-size: 13px;
+}
+
+.category-button.active {
+  background: var(--soft);
+  border-color: var(--sage);
+  font-weight: bold;
+}
+
+.search-hint {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 12px;
+  line-height: 1.6;
+}
+
+/* ============================= */
+/* 4. 목록 탭 */
+/* ============================= */
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin: 25px 0 17px;
+}
+
+.tab-button {
+  flex: 1;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 12px 4px;
+  font-size: 12px;
+  color: var(--gray);
+}
+
+.tab-button.active {
+  background: var(--dark);
+  color: white;
+  border-color: var(--dark);
+}
+
+/* ============================= */
+/* 5. 장소 카드 */
+/* ============================= */
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 13px;
+}
+
+.list-header strong {
+  font-size: 15px;
+}
+
+.list-header span {
+  color: var(--gray);
+  font-size: 12px;
+}
+
+.place-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 20px;
+}
+
+.place-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 17px;
+  transition: 0.2s;
+}
+
+.place-card:hover {
+  border-color: var(--sage);
+  box-shadow: 0 5px 15px #0000000A;
+}
+
+.place-name {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 7px;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.place-address {
+  font-size: 12px;
+  color: var(--gray);
+  line-height: 1.7;
+}
+
+.place-date {
+  color: var(--brown);
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.place-note {
+  font-size: 12px;
+  line-height: 1.8;
+  background: #F5F0E7;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 9px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.card-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+
+.small-button {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 9px 11px;
+  background: white;
+  color: var(--dark);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.small-button.primary {
+  color: white;
+  background: var(--sage);
+  border-color: var(--sage);
+}
+
+.small-button.saved {
+  background: #F5E8E6;
+  color: #B07876;
+}
+
+.small-button.danger {
+  color: #B27373;
+}
+
+.empty {
+  padding: 24px 12px;
+  color: var(--gray);
+  font-size: 13px;
+  text-align: center;
+  line-height: 2;
+}
+
+/* 방문 스탬프 */
+.stamp {
+  display: inline-block;
+  border: 2px dashed #B48165;
+  color: #B48165;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  width: 69px;
+  height: 69px;
+  padding-top: 15px;
+  line-height: 1.5;
+  transform: rotate(-12deg);
+  margin-bottom: 10px;
+  background: #FAF1E7;
+}
+
+/* ============================= */
+/* 6. 지도 */
+/* ============================= */
+
+.map-section {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+.map-guide {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  padding: 13px 17px;
+  background: #FFFFFFF0;
+  color: var(--dark);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px #00000015;
+  font-size: 12px;
+  max-width: 75%;
+}
+
+.location-button {
+  position: absolute;
+  right: 24px;
+  bottom: 25px;
+  z-index: 1;
+  border: none;
+  border-radius: 12px;
+  padding: 13px 17px;
+  background: white;
+  color: var(--dark);
+  box-shadow: 0 3px 14px #00000015;
+}
+
+/* ============================= */
+/* 7. 방문 기록 입력 창 */
+/* ============================= */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #15211999;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 460px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+  border-radius: 19px;
+  background: var(--paper);
+  box-shadow: 0 15px 45px #00000025;
+}
+
+.modal-content h2 {
+  margin: 0 0 9px;
+  font-size: 22px;
+}
+
+.modal-place {
+  color: var(--brown);
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 17px 0 8px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: white;
+  color: var(--dark);
+}
+
+textarea.form-input {
+  min-height: 125px;
+  resize: vertical;
+  line-height: 1.7;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 9px;
+  margin-top: 22px;
+}
+
+.modal-actions button {
+  flex: 1;
+  padding: 13px;
+  border-radius: 11px;
+  border: 1px solid var(--border);
+  background: white;
+}
+
+.modal-actions button.primary {
+  background: var(--sage);
+  color: white;
+  border-color: var(--sage);
+}
+
+@media (max-width: 780px) {
+  .layout {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .map-section {
+    height: 420px;
+    flex: none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <!-- 왼쪽 문화생활 여권 영역 -->
+  <aside class="sidebar">
+
+    <div class="brand">MUSEUM PASSPORT</div>
+    <h1>🏛️ 뮤지엄 패스포트</h1>
+
+    <p class="subtitle">
+      전시를 발견하고, 문화를 경험하고,<br>
+      나만의 특별한 방문 기록을 남겨보세요.
+    </p>
+
+    <!-- 나의 여권 통계 -->
+    <section class="passport">
+      <div class="passport-label">
+        MY CULTURE PASSPORT
+      </div>
+
+      <h2>나의 문화생활 여권 ✦</h2>
+
+      <p class="passport-description">
+        하나의 방문, 하나의 추억.<br>
+        스탬프를 모아 나만의 여권을 완성해요.
+      </p>
+
+      <div class="stats">
+        <div class="stat">
+          <strong id="wishCount">0</strong>
+          <span>가고 싶은 곳</span>
+        </div>
+
+        <div class="stat">
+          <strong id="visitCount">0</strong>
+          <span>방문한 곳</span>
+        </div>
+
+        <div class="stat">
+          <strong id="stampCount">0</strong>
+          <span>수집한 스탬프</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 검색 영역 -->
+    <div class="section-title">
+      🔎 어떤 문화공간을 찾고 있나요?
+    </div>
+
+    <div class="search-row">
+      <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="지역 또는 박물관 이름 검색"
+        aria-label="문화시설 검색어"
+      >
+
+      <button class="search-button" id="searchButton">
+        검색
+      </button>
+    </div>
+
+    <!-- 검색 유형 선택 -->
+    <div class="categories">
+      <button class="category-button active"
+              data-category="museum">
+        🏛️ 박물관
+      </button>
+
+      <button class="category-button"
+              data-category="art">
+        🎨 미술관
+      </button>
+
+      <button class="category-button"
+              data-category="history">
+        📜 역사관
+      </button>
+
+      <button class="category-button"
+              data-category="science">
+        🔬 과학관
+      </button>
+    </div>
+
+    <p class="search-hint">
+      현재 위치 주변에서 검색해요.
+      다른 지역은 '부산 박물관'처럼 입력해 보세요.
+    </p>
+
+    <!-- 목록 전환 -->
+    <div class="tabs">
+      <button class="tab-button active"
+              data-tab="search">
+        🔎 장소 찾기
+      </button>
+
+      <button class="tab-button"
+              data-tab="wishlist">
+        ♡ 가고 싶은 곳
+      </button>
+
+      <button class="tab-button"
+              data-tab="visited">
+        ✦ 나의 여권
+      </button>
+    </div>
+
+    <div class="list-header">
+      <strong id="listTitle">검색 결과</strong>
+      <span id="resultCount">0곳</span>
+    </div>
+
+    <div class="place-list" id="placeList">
+      <div class="empty">
+        🌷 문화공간을 검색하고<br>
+        나만의 여권을 만들어 보세요.
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- 오른쪽 카카오맵 -->
+  <section class="map-section">
+    <div id="map"></div>
+
+    <div class="map-guide" id="mapGuide">
+      📍 지도를 불러오는 중입니다.
+    </div>
+
+    <button class="location-button"
+            id="locationButton">
+      📍 내 위치로 이동
+    </button>
+  </section>
+
+</div>
+
+<!-- 방문 기록 입력창 -->
+<div class="modal" id="visitModal">
+
+  <div class="modal-content"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="modalTitle">
+
+    <h2 id="modalTitle">
+      ✦ 방문 스탬프 남기기
+    </h2>
+
+    <div class="modal-place" id="modalPlace"></div>
+
+    <form id="visitForm">
+
+      <label class="form-label" for="visitDate">
+        방문 날짜
+      </label>
+
+      <input
+        class="form-input"
+        type="date"
+        id="visitDate"
+        required
+      >
+
+      <label class="form-label" for="visitNote">
+        나의 감상 기록
+      </label>
+
+      <textarea
+        class="form-input"
+        id="visitNote"
+        placeholder="기억에 남는 전시나 작품, 느낀 점을 자유롭게 기록해 보세요."
+      ></textarea>
+
+      <div class="modal-actions">
+        <button type="button" id="cancelButton">
+          취소
+        </button>
+
+        <button type="submit" class="primary">
+          ✦ 스탬프 저장
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<!-- 카카오맵 SDK -->
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=8d6ef96ff9af00addd82d677a395ed91&libraries=services&autoload=false"></script>
+
+<script>
+/* ================================= */
+/* 1. 기본 변수 */
+/* ================================= */
+
+let map;
+let places;
+let infoWindow;
+
+let markers = [];
+let currentMarker = null;
+let currentPosition = null;
+
+let currentTab = "search";
+let selectedCategory = "museum";
+let searchResults = [];
+let editingPlace = null;
+let searchRequestId = 0;
+
+// 검색 시작 전 기본 지도 위치: 서울시청
+const defaultLatitude = 37.5665;
+const defaultLongitude = 126.9780;
+
+// 브라우저 저장소 이름
+const storageKey = "museumPassportDataV1";
+
+// 장소별 검색 키워드
+const categories = {
+  museum: {
+    label: "박물관",
+    keywords: ["박물관"],
+    icon: "🏛️",
+    color: "#8FA5A0"
+  },
+  art: {
+    label: "미술관",
+    keywords: ["미술관", "현대미술관"],
+    icon: "🎨",
+    color: "#B8A0C8"
+  },
+  history: {
+    label: "역사관",
+    keywords: ["역사박물관", "역사관"],
+    icon: "📜",
+    color: "#BE9C76"
+  },
+  science: {
+    label: "과학관",
+    keywords: ["과학관", "과학박물관"],
+    icon: "🔬",
+    color: "#8DAEC4"
+  }
+};
+
+// 찜 목록과 방문 기록
+let wishlist = [];
+let visits = [];
+
+/* ================================= */
+/* 2. HTML 요소 불러오기 */
+/* ================================= */
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const searchButton =
+  document.getElementById("searchButton");
+
+const placeList =
+  document.getElementById("placeList");
+
+const listTitle =
+  document.getElementById("listTitle");
+
+const resultCount =
+  document.getElementById("resultCount");
+
+const mapGuide =
+  document.getElementById("mapGuide");
+
+const visitModal =
+  document.getElementById("visitModal");
+
+const visitDate =
+  document.getElementById("visitDate");
+
+const visitNote =
+  document.getElementById("visitNote");
+
+const visitForm =
+  document.getElementById("visitForm");
+
+/* ================================= */
+/* 3. 저장된 여권 불러오기 */
+/* ================================= */
+
+function loadData() {
+  try {
+    const saved = JSON.parse(
+      localStorage.getItem(storageKey) || "{}"
+    );
+
+    wishlist = Array.isArray(saved.wishlist)
+      ? saved.wishlist : [];
+
+    visits = Array.isArray(saved.visits)
+      ? saved.visits : [];
+
+  } catch (error) {
+    console.error("저장된 데이터를 읽지 못했습니다.", error);
+    wishlist = [];
+    visits = [];
+  }
+
+  updateStatistics();
+}
+
+// 모든 여권 데이터 저장
+function saveData() {
+  try {
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify({ wishlist, visits })
+    );
+  } catch (error) {
+    alert("브라우저에 기록을 저장할 수 없습니다.");
+    console.error(error);
+  }
+
+  updateStatistics();
+}
+
+// 여권 통계 갱신
+function updateStatistics() {
+  document.getElementById("wishCount").textContent =
+    wishlist.length;
+
+  document.getElementById("visitCount").textContent =
+    visits.length;
+
+  document.getElementById("stampCount").textContent =
+    visits.length;
+}
+
+/* ================================= */
+/* 4. 카카오맵 생성 */
+/* ================================= */
+
+if (window.kakao && kakao.maps) {
+
+  kakao.maps.load(function() {
+
+    const defaultPosition = new kakao.maps.LatLng(
+      defaultLatitude,
+      defaultLongitude
+    );
+
+    // SDK가 로드된 뒤 지도 생성
+    map = new kakao.maps.Map(
+      document.getElementById("map"),
+      {
+        center: defaultPosition,
+        level: 5
+      }
+    );
+
+    places = new kakao.maps.services.Places();
+
+    infoWindow = new kakao.maps.InfoWindow({
+      zIndex: 2
+    });
+
+    setupEvents();
+    getCurrentLocation();
+  });
+
+} else {
+  mapGuide.textContent =
+    "카카오맵 로딩 실패: API 키와 도메인을 확인해 주세요.";
+
+  // 지도가 없어도 저장된 여권은 확인 가능
+  setupEvents();
+}
+
+loadData();
+
+/* ================================= */
+/* 5. 이벤트 연결 */
+/* ================================= */
+
+function setupEvents() {
+
+  // 장소 검색
+  searchButton.addEventListener("click", searchMuseums);
+
+  searchInput.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      searchMuseums();
+    }
+  });
+
+  // 검색 유형 변경
+  document.querySelectorAll(
+    ".category-button"
+  ).forEach(function(button) {
+
+    button.addEventListener("click", function() {
+
+      document.querySelectorAll(
+        ".category-button"
+      ).forEach(function(item) {
+        item.classList.remove("active");
+      });
+
+      button.classList.add("active");
+      selectedCategory = button.dataset.category;
+    });
+
+  });
+
+  // 목록 탭 변경
+  document.querySelectorAll(
+    ".tab-button"
+  ).forEach(function(button) {
+
+    button.addEventListener("click", function() {
+      switchTab(button.dataset.tab);
+    });
+
+  });
+
+  // 현재 위치 버튼
+  document.getElementById("locationButton")
+    .addEventListener("click", function() {
+
+      if (map) {
+        getCurrentLocation();
+      }
+
+    });
+
+  // 방문 기록 입력창 닫기
+  document.getElementById("cancelButton")
+    .addEventListener("click", closeModal);
+
+  // 방문 날짜와 감상평 저장
+  visitForm.addEventListener("submit", saveVisit);
+
+  // 입력창 바깥을 누르면 닫기
+  visitModal.addEventListener("click", function(event) {
+    if (event.target === visitModal) {
+      closeModal();
+    }
+  });
+
+  // ESC 키로 입력창 닫기
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "Escape") {
+      closeModal();
+    }
+  });
+}
+
+/* ================================= */
+/* 6. 현재 위치 확인 */
+/* ================================= */
+
+function getCurrentLocation() {
+
+  if (!navigator.geolocation) {
+    mapGuide.textContent =
+      "이 브라우저는 위치 정보를 지원하지 않아요.";
+    return;
+  }
+
+  mapGuide.textContent = "📍 현재 위치를 찾고 있어요.";
+
+  navigator.geolocation.getCurrentPosition(
+
+    function(position) {
+
+      currentPosition = new kakao.maps.LatLng(
+        position.coords.latitude,
+        position.coords.longitude
+      );
+
+      map.setCenter(currentPosition);
+      map.setLevel(5);
+
+      if (currentMarker) {
+        currentMarker.setMap(null);
+      }
+
+      currentMarker = new kakao.maps.Marker({
+        map: map,
+        position: currentPosition,
+        zIndex: 10
+      });
+
+      mapGuide.textContent =
+        "🌿 현재 위치를 확인했어요.";
+    },
+
+    function() {
+      mapGuide.textContent =
+        "위치를 확인하지 못했어요. 기본 지도에서 검색할 수 있어요.";
+    },
+
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  );
+}
+
+/* ================================= */
+/* 7. 박물관 및 미술관 검색 */
+/* ================================= */
+
+async function searchMuseums() {
+
+  if (!places || !map) {
+    alert("지도가 준비되지 않았어요. API 설정을 확인해 주세요.");
+    return;
+  }
+
+  const requestId = ++searchRequestId;
+  const category = selectedCategory;
+
+  const typedKeyword = searchInput.value.trim();
+
+  // 직접 검색어가 있으면 해당 검색어 사용
+  // 없으면 선택한 시설 유형의 검색어 사용
+  const keywords = typedKeyword
+    ? [typedKeyword]
+    : categories[category].keywords;
+
+  searchButton.disabled = true;
+  searchButton.textContent = "검색 중";
+
+  switchTab("search");
+
+  placeList.replaceChildren();
+  showMessage("🔎 문화공간을 검색하고 있어요.");
+
+  try {
+
+    // 현재 위치가 없으면 지도 중심으로 검색
+    const searchCenter = currentPosition || map.getCenter();
+
+    // 한 번의 검색에서 최대 10km 반경 이용
+    // 직접 지역명을 입력한 경우 지역 검색을 제한하지 않음
+    const options = typedKeyword
+      ? { size: 15 }
+      : {
+          location: searchCenter,
+          radius: 10000,
+          size: 15,
+          sort: kakao.maps.services.SortBy.DISTANCE
+        };
+
+    const groups = await Promise.all(
+      keywords.map(function(keyword) {
+        return searchKeyword(keyword, options);
+      })
+    );
+
+    if (requestId !== searchRequestId) {
+      return;
+    }
+
+    // 검색 결과 중복 제거
+    const unique = new Map();
+
+    groups.flat().forEach(function(place) {
+
+      // 판매점이 명확하게 표시된 장소 일부 제외
+      const categoryText = place.category_name || "";
+
+      const excluded = [
+        "가구판매",
+        "인테리어판매",
+        "문구판매"
+      ];
+
+      if (excluded.some(function(word) {
+        return categoryText.includes(word);
+      })) {
+        return;
+      }
+
+      unique.set(String(place.id), {
+        ...place,
+        savedCategory: category
+      });
+
+    });
+
+    searchResults = Array.from(unique.values());
+
+    renderCurrentTab();
+
+  } catch (error) {
+
+    console.error(error);
+    placeList.replaceChildren();
+    showMessage("검색 중 문제가 발생했어요. 다시 시도해 주세요.");
+
+  } finally {
+
+    if (requestId === searchRequestId) {
+      searchButton.disabled = false;
+      searchButton.textContent = "검색";
+    }
+
+  }
+}
+
+// 카카오맵 키워드 검색을 Promise로 감싸기
+function searchKeyword(keyword, options) {
+
+  return new Promise(function(resolve, reject) {
+
+    places.keywordSearch(
+      keyword,
+      function(data, status) {
+
+        if (status === kakao.maps.services.Status.OK) {
+          resolve(data);
+
+        } else if (
+          status === kakao.maps.services.Status.ZERO_RESULT
+        ) {
+          resolve([]);
+
+        } else {
+          reject(new Error("장소 검색 실패: " + keyword));
+        }
+
+      },
+      options
+    );
+
+  });
+}
+
+/* ================================= */
+/* 8. 목록 전환 */
+/* ================================= */
+
+function switchTab(tab) {
+
+  currentTab = tab;
+
+  document.querySelectorAll(
+    ".tab-button"
+  ).forEach(function(button) {
+
+    button.classList.toggle(
+      "active",
+      button.dataset.tab === tab
+    );
+
+  });
+
+  renderCurrentTab();
+}
+
+// 현재 탭에 맞는 목록 그리기
+function renderCurrentTab() {
+
+  let data = [];
+
+  if (currentTab === "search") {
+    listTitle.textContent = "발견한 문화공간";
+    data = searchResults;
+
+  } else if (currentTab === "wishlist") {
+    listTitle.textContent = "가고 싶은 문화공간";
+    data = wishlist;
+
+  } else {
+    listTitle.textContent = "나의 방문 스탬프";
+    data = visits;
+  }
+
+  resultCount.textContent = data.length + "곳";
+
+  placeList.replaceChildren();
+  clearMarkers();
+
+  if (data.length === 0) {
+
+    const messages = {
+      search: "🏛️ 박물관이나 미술관을 검색해 보세요.",
+      wishlist: "♡ 아직 저장한 문화공간이 없어요.",
+      visited: "✦ 첫 번째 방문 스탬프를 모아보세요."
+    };
+
+    showMessage(messages[currentTab]);
+    return;
+  }
+
+  data.forEach(function(place) {
+    createPlaceCard(place);
+  });
+
+  // 현재 위치에서 새로 검색한 경우 지도 중심 유지
+  if (currentTab === "search" && currentPosition) {
+    map.setCenter(currentPosition);
+    map.setLevel(5);
+  }
+
+  if (map) {
+    mapGuide.textContent =
+      "🏛️ " + data.length + "곳의 문화공간을 표시했어요.";
+  }
+}
+
+function showMessage(message) {
+  const element = document.createElement("div");
+  element.className = "empty";
+  element.textContent = message;
+  placeList.appendChild(element);
+}
+
+/* ================================= */
+/* 9. 찜하기 기능 */
+/* ================================= */
+
+// 장소 찜 여부 확인
+function isWishlisted(placeId) {
+
+  return wishlist.some(function(place) {
+    return String(place.id) === String(placeId);
+  });
+}
+
+// 가고 싶은 장소 저장 또는 삭제
+function toggleWishlist(place) {
+
+  if (isWishlisted(place.id)) {
+
+    wishlist = wishlist.filter(function(item) {
+      return String(item.id) !== String(place.id);
+    });
+
+  } else {
+
+    wishlist.push(createStoredPlace(place));
+  }
+
+  saveData();
+  renderCurrentTab();
+}
+
+// 필요한 장소 정보만 저장
+function createStoredPlace(place) {
+
+  return {
+    id: String(place.id),
+    place_name: place.place_name,
+    address_name: place.address_name || "",
+    road_address_name: place.road_address_name || "",
+    place_url: place.place_url || "",
+    x: place.x,
+    y: place.y,
+    savedCategory: place.savedCategory || "museum"
+  };
+}
+
+/* ================================= */
+/* 10. 방문 기록 및 스탬프 */
+/* ================================= */
+
+// 방문 기록 확인
+function findVisit(placeId) {
+
+  return visits.find(function(place) {
+    return String(place.id) === String(placeId);
+  });
+}
+
+// 지역 시간 기준 오늘 날짜
+function getToday() {
+
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+
+  return year + "-" + month + "-" + day;
+}
+
+// 방문 기록 입력창 열기
+function openVisitModal(place) {
+
+  editingPlace = place;
+
+  const existing = findVisit(place.id);
+
+  document.getElementById("modalTitle").textContent =
+    existing ? "✦ 방문 기록 수정" : "✦ 방문 스탬프 남기기";
+
+  document.getElementById("modalPlace").textContent =
+    place.place_name;
+
+  visitDate.max = getToday();
+
+  visitDate.value =
+    existing ? existing.visitDate : getToday();
+
+  visitNote.value =
+    existing ? existing.visitNote : "";
+
+  visitModal.classList.add("open");
+}
+
+// 방문 기록 저장
+function saveVisit(event) {
+
+  event.preventDefault();
+
+  if (!editingPlace) {
+    return;
+  }
+
+  if (!visitDate.value ||
+      visitDate.value > getToday()) {
+
+    alert("오늘 또는 이전 방문 날짜를 선택해 주세요.");
+    return;
+  }
+
+  const stored = createStoredPlace(editingPlace);
+
+  const record = {
+    ...stored,
+    visitDate: visitDate.value,
+    visitNote: visitNote.value.trim()
+  };
+
+  // 기존 기록이 있다면 갱신
+  visits = visits.filter(function(item) {
+    return String(item.id) !== String(record.id);
+  });
+
+  visits.push(record);
+
+  // 최근 방문 날짜순 정렬
+  visits.sort(function(a, b) {
+    return b.visitDate.localeCompare(a.visitDate);
+  });
+
+  // 방문 완료하면 찜 목록에서는 제거
+  wishlist = wishlist.filter(function(item) {
+    return String(item.id) !== String(record.id);
+  });
+
+  saveData();
+  closeModal();
+
+  switchTab("visited");
+}
+
+// 방문 기록 삭제
+function deleteVisit(placeId) {
+
+  if (!confirm("방문 기록과 스탬프를 삭제할까요?")) {
+    return;
+  }
+
+  visits = visits.filter(function(place) {
+    return String(place.id) !== String(placeId);
+  });
+
+  saveData();
+  renderCurrentTab();
+}
+
+function closeModal() {
+
+  visitModal.classList.remove("open");
+  editingPlace = null;
+
+}
+
+/* ================================= */
+/* 11. 장소 카드 만들기 */
+/* ================================= */
+
+function createPlaceCard(place) {
+
+  const card = document.createElement("div");
+  card.className = "place-card";
+
+  const category = categories[
+    place.savedCategory
+  ] || categories.museum;
+
+  const visited = findVisit(place.id);
+  const wished = isWishlisted(place.id);
+
+  // 방문한 장소에는 스탬프 표시
+  if (visited) {
+
+    const stamp = document.createElement("div");
+    stamp.className = "stamp";
+    stamp.textContent = "MUSEUM\nVISITED ✦";
+    stamp.style.whiteSpace = "pre-line";
+
+    card.appendChild(stamp);
+  }
+
+  // 장소명
+  const name = document.createElement("div");
+
+  name.className = "place-name";
+  name.textContent =
+    category.icon + " " + place.place_name;
+
+  name.addEventListener("click", function() {
+    focusPlace(place);
+  });
+
+  // 주소
+  const address = document.createElement("div");
+
+  address.className = "place-address";
+  address.textContent =
+    place.road_address_name ||
+    place.address_name ||
+    "주소 정보가 없습니다.";
+
+  card.appendChild(name);
+  card.appendChild(address);
+
+  // 저장된 방문 기록 표시
+  if (visited) {
+
+    const date = document.createElement("div");
+
+    date.className = "place-date";
+    date.textContent =
+      "✦ " + visited.visitDate + " 방문 완료";
+
+    card.appendChild(date);
+
+    if (visited.visitNote) {
+
+      const note = document.createElement("div");
+
+      note.className = "place-note";
+      note.textContent = visited.visitNote;
+
+      card.appendChild(note);
+    }
+  }
+
+  // 카드 버튼 영역
+  const actions = document.createElement("div");
+
+  actions.className = "card-buttons";
+
+  // 찜하기 버튼
+  const wishButton = document.createElement("button");
+
+  wishButton.className =
+    "small-button" + (wished ? " saved" : "");
+
+  wishButton.textContent =
+    wished ? "♥ 찜 취소" : "♡ 가고 싶어요";
+
+  wishButton.addEventListener("click", function() {
+    toggleWishlist(place);
+  });
+
+  actions.appendChild(wishButton);
+
+  // 스탬프 / 감상 기록 버튼
+  const visitButton = document.createElement("button");
+
+  visitButton.className = "small-button primary";
+
+  visitButton.textContent =
+    visited ? "✎ 감상 기록 수정" : "✦ 방문 완료";
+
+  visitButton.addEventListener("click", function() {
+    openVisitModal(place);
+  });
+
+  actions.appendChild(visitButton);
+
+  // 카카오맵 상세 페이지 링크
+  if (place.place_url) {
+
+    const detailLink = document.createElement("a");
+
+    detailLink.className = "small-button";
+    detailLink.textContent = "↗ 상세 정보";
+    detailLink.href = place.place_url;
+    detailLink.target = "_blank";
+    detailLink.rel = "noopener noreferrer";
+
+    actions.appendChild(detailLink);
+  }
+
+  // 방문 기록 삭제 버튼
+  if (visited) {
+
+    const deleteButton = document.createElement("button");
+
+    deleteButton.className = "small-button danger";
+    deleteButton.textContent = "기록 삭제";
+
+    deleteButton.addEventListener("click", function() {
+      deleteVisit(place.id);
+    });
+
+    actions.appendChild(deleteButton);
+  }
+
+  card.appendChild(actions);
+  placeList.appendChild(card);
+
+  // 지도에 마커 표시
+  if (map && place.x && place.y) {
+
+    const position = new kakao.maps.LatLng(
+      Number(place.y),
+      Number(place.x)
+    );
+
+    const marker = new kakao.maps.Marker({
+      map: map,
+      position: position
+    });
+
+    markers.push(marker);
+
+    kakao.maps.event.addListener(
+      marker,
+      "click",
+      function() {
+
+        focusPlace(place);
+
+        card.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest"
+        });
+      }
+    );
+  }
+}
+
+/* ================================= */
+/* 12. 지도 이동 */
+/* ================================= */
+
+function focusPlace(place) {
+
+  if (!map) {
+    return;
+  }
+
+  const position = new kakao.maps.LatLng(
+    Number(place.y),
+    Number(place.x)
+  );
+
+  map.setCenter(position);
+  map.setLevel(4);
+
+  if (infoWindow) {
+    infoWindow.close();
+  }
+
+  // 장소명은 textContent로 안전하게 처리
+  const content = document.createElement("div");
+
+  content.style.padding = "12px 15px";
+  content.style.fontSize = "13px";
+  content.style.color = "#405746";
+  content.textContent = place.place_name;
+
+  infoWindow.setContent(content);
+
+  // 마커 위치에 맞춰 정보창 표시
+  const matchedMarker = markers.find(function(marker) {
+
+    const markerPosition = marker.getPosition();
+
+    return Math.abs(
+      markerPosition.getLat() - Number(place.y)
+    ) < 0.000001 &&
+    Math.abs(
+      markerPosition.getLng() - Number(place.x)
+    ) < 0.000001;
+  });
+
+  if (matchedMarker) {
+    infoWindow.open(map, matchedMarker);
+  }
+}
+
+// 현재 검색 마커 제거
+function clearMarkers() {
+
+  if (infoWindow) {
+    infoWindow.close();
+  }
+
+  markers.forEach(function(marker) {
+    marker.setMap(null);
+  });
+
+  markers = [];
+}
+
+</script>
+</body>
+</html>
